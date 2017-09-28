@@ -52,13 +52,30 @@ void MyFunc (vector<int> numbers[], int inputs ) {
 		{
 			C[numbers[j].at(digit)]++;
 		}
+		for (int j = 0; j<=biggest; j++)
+		{
+			cout << C[j];
+		}
+		cout << endl;
 		for (int k=0;k<=biggest;k++)
 		{
-			for(int v=0; v<inputs; v++)
-			{
-				if(numbers[v].at(digit) == k)
+			int v = 0;
+			if(C[k] != 0){
+				while(C[k] != 0)
 				{
-					sorted[v] = numbers[v];
+					if(numbers[v].at(digit) == k)
+					{
+						sorted[v] = numbers[v];
+						C[k]--;
+						if(v == inputs)
+						{
+							v = 0;
+						}
+						else
+						{
+							v++;
+						}
+					}
 				}
 			}
 		}
