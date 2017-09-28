@@ -6,7 +6,9 @@
 
 using namespace std;
 
-void print(vector<int> numbers[], int inputs) {
+int digits;
+
+void print(vector<int> numbers[],int inputs) {
 	for(int i=0; i<inputs; i++)
 	{
 	        for(int j=0; j<10; j++)
@@ -20,73 +22,79 @@ void print(vector<int> numbers[], int inputs) {
 	}
 }
 
-int findBig(vector<int> numbers[], int inputs) {
-	int big = 0;
-	for (int i = 0; i < inputs; i++)
+void copyVector(vector<int>numbers[], vector<int> sorted[],int V, int W, int inputs) {
+	int p;
+	for(int i = 0; i < 10; i++)
 	{
-		for(int j=0; j<10; j++)
-		{
-			if(big <= numbers[i].at(j))
-			{
-				big = numbers[i].at(j);
-			}
-		}
+		p = numbers[V].at(i);
+		sorted[W].push_back(p);
 	}
-	return big;
 }
 
-
-void MyFunc (vector<int> numbers[], int inputs ) {
-	int digit;
+void MyFunc (vector<int> numbers[], int inputs,int digits) {
 	vector<int> sorted[inputs];
-	for (digit = 9; digit >= 0; digit--)
-	{
-//		int biggest = findBig(numbers,inputs);
 		int biggest = 10;
-		int C[biggest+1];
-		for (int i=0; i<=biggest; i++)
+		int C[biggest];
+		for (int i=0; i<biggest; i++)
 		{
 			C[i] = 0;
 		}
 		for (int j =0; j<inputs; j++)
 		{
-			C[numbers[j].at(digit)]++;
+			C[numbers[j].at(digits)]++;
 		}
-		for (int j = 0; j<=biggest; j++)
+		for (int j = 0; j<biggest; j++)
 		{
-			cout << C[j];
+			cout << "there are " << C[j] << " " << j << "s" << endl;
 		}
 		cout << endl;
-		for (int k=0;k<=biggest;k++)
+		int w = 0;
+		int v = 0;
+		for (int k=0;k<biggest;k++)
 		{
-			int v = 0;
-			if(C[k] != 0){
-				while(C[k] != 0)
+//			cout << "looking for " << k << " in vectors" << endl;
+			//int v = 0;
+			//int w = 0;
+			while(C[k] > 0)
+			{
+				cout << "digit is " << digits << endl;
+				if(numbers[v].at(digits) == k)
 				{
-					if(numbers[v].at(digit) == k)
-					{
-						sorted[v] = numbers[v];
-						C[k]--;
-						if(v == inputs)
-						{
-							v = 0;
-						}
-						else
-						{
-							v++;
-						}
-					}
+					cout << "adding to sorted" << endl;
+//					cout << "v is " << v << endl << "w is " << w << endl;
+					copyVector(numbers,sorted,v,w,inputs);
+					w++;
+					C[k]--;
+				}
+				v++;
+				if(v == inputs)
+				{
+//					cout << "looping/reset V" << endl;
+					v = 0;
 				}
 			}
+			cout << endl;
 		}
-	}
-	print(sorted, inputs);
+		if(digits == 0)
+		{
+			cout << "printing" << endl;
+			print(sorted,inputs);
+		}
+		else if (digits > 0)
+		{
+			digits--;
+			MyFunc(sorted,inputs,digits);
+		}
+
+	//change to sorted vector
+//	cout << "gonna go print" << endl;
 }
 
 
 int main(int argc,char **argv) {
 
 	int inputs;
+	digits = 9;
 	cin >> inputs;
 	//int* numbers = new int[inputs];
 	vector<int> numbers[inputs];
@@ -100,5 +108,5 @@ int main(int argc,char **argv) {
 		}
 	}
   // Run your algorithms to manipulate the elements in Sequence
-	MyFunc(numbers,inputs);
+	MyFunc(numbers,inputs,digits);
 }
